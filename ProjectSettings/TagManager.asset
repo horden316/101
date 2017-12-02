@@ -6,6 +6,7 @@ TagManager:
   tags:
   - stair
   - up
+  - trap
   layers:
   - Default
   - TransparentFX
