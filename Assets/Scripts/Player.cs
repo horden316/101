@@ -6,33 +6,30 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-    public int i, j;
-    public bool died = false;
-    public int Challenge_type;
-    float time;
-    public float[] px = new float[50];
+    public int leave_f, j;//i是代表剛離開的階梯
+    public int c;//距離下個關卡
+    public bool died = false;//生死狀態
+  //  public int Challenge_type;//障礙，小挑戰模式，製作中
+    public float[] px = new float[50];//儲存階梯預設位置
     public float[] py = new float[50];
     public float[] pz = new float[50];
-    public GameObject G_Over;
-    public GameObject AllStairs;
-    // Use this for initialization
+    public GameObject G_Over;//死亡畫面
+    public GameObject AllStairs;//所有階梯
+
     void Start()
     {
-      //  GameObject.Find("Panel").SetActive(false);
-        i = -1;
+        leave_f = -1;
         for (j = 0; j < 50; j++)
         {
             px[j] = GameObject.Find("Cube (" + j + ")").transform.position.x;
             py[j] = GameObject.Find("Cube (" + j + ")").transform.position.y;
             pz[j] = GameObject.Find("Cube (" + j + ")").transform.position.z;
         }
-        Challenge(); 
     }
-    // Update is called once per frame
+
     void Update()
     {
 
-		Challenge(); 
 
         if (Input.GetKey(KeyCode.D))
         {
@@ -55,16 +52,19 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.back * 10 * Time.deltaTime);
         }
 
+		if (Input.GetKey(KeyCode.L))
+		{
+			//C_mosters(); 
+		}
 
-        //time += Time.deltaTime;
-        if (i > -1 && i < 40 && died == false)
+        if (leave_f > -1 && leave_f < 40 && died == false)
         {
-            GameObject.Find("Cube (" + i + ")").transform.Translate(Vector3.down * 10 * Time.deltaTime);
+            GameObject.Find("Cube (" + leave_f + ")").transform.Translate(Vector3.down * 10 * Time.deltaTime);
 
         }
-        if (i > -1 && i < 40 && died == false&&i !=-1)
+        if (leave_f > -1 && leave_f < 40 && died == false&&leave_f !=-1)
         {
-            if ((GameObject.Find("Cube (" + (i+1) + ")").transform.position.y) - transform.position.y > 5)
+            if ((GameObject.Find("Cube (" + (leave_f+1) + ")").transform.position.y) - transform.position.y > 8)
             {
                 print("true!!");
                 G_Over.SetActive(true);
@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
                 if (transform.position.y >= 45)
                 {
                     print("Move");
-                    if (i > -1 && i < 50)
+                    if (leave_f > -1 && leave_f < 50)
                     {
                         print("Recover");
                         for (int k = 0; k < 50; k++)
@@ -83,14 +83,17 @@ public class Player : MonoBehaviour
                             GameObject.Find("Cube (" + k + ")").transform.position = new Vector3(px[k], py[k], pz[k]);
                         }
                 transform.position = new Vector3(transform.position.x, 2, 0);
-                        i = -1;
+                        leave_f = -1;
                 print("iiiiiii");
                     }
                 }
 
+       /* if(c>10){
+            Challenge();
+            c = 0;
+        }
 
-
-    
+    */
     
 
     }
@@ -103,9 +106,11 @@ public class Player : MonoBehaviour
             if (collision.collider.CompareTag("up") && Input.GetKey(KeyCode.W))
             {
                 transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+                c++;
             }
 
-       // GameObject.Find("Cube (" + i + ")").transform.position = new Vector3(10000, 10000, 10000);
+
+        GameObject.Find("Cube (" + leave_f + ")").transform.position = new Vector3(10000, 10000, 10000);
            
 
         }
@@ -116,7 +121,7 @@ public class Player : MonoBehaviour
         {
             if (col.gameObject.name == "Cube (" + k + ")"&&(col.gameObject.name != "Cube (" + 40 + ")"))
             {
-                i = k;
+                leave_f = k;
             }
         }
         }
@@ -132,18 +137,43 @@ public class Player : MonoBehaviour
     		G_Over.SetActive(false);
             transform.rotation = Quaternion.identity;
             transform.position = new Vector3(0, 3, 0);
-            i = -1;
+            leave_f = -1;
             died = false;
             print("start");
         }
 
-    public void Challenge(){
-        if (Input.GetKeyDown(KeyCode.L))
-        {
+    /*  public void Challenge(){
+       
             Challenge_type = (int)Random.Range(0, 5);
             print(Challenge_type); 
             transform.position = new Vector3(0, 3, 0);
+            switch (Challenge_type){
+                case 0:
+                    C_mosters(); 
+                    break;
+				case 1:
+					C_mosters();
+					break;
+				case 2:
+					C_mosters();
+					break;
+				case 3:
+					C_mosters();
+					break;
+				case 4:
+					C_mosters();
+					break;
+				case 5:
+					C_mosters();
+					break;
+
+
+            
         }
-    }
+    }*/
+
+
+
+
      
 }
