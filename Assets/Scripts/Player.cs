@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,15 +9,16 @@ public class Player : MonoBehaviour
     public int leave_f, j;//i是代表剛離開的階梯
     public int c;//距離下個關卡
     public bool died = false;//生死狀態
-  //  public int Challenge_type;//障礙，小挑戰模式，製作中
+    public bool JumpActive = true;
     public float[] px = new float[50];//儲存階梯預設位置
     public float[] py = new float[50];
     public float[] pz = new float[50];
     public GameObject G_Over;//死亡畫面
     public GameObject AllStairs;//所有階梯
-
+    public Rigidbody rb;
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         leave_f = -1;
         for (j = 0; j < 50; j++)
         {
@@ -52,9 +53,11 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.back * 10 * Time.deltaTime);
         }
 
-		if (Input.GetKey(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.Space) && JumpActive == true)
 		{
-			//C_mosters(); 
+            rb.AddForce(0, 4000, 0);
+            print("Jump");
+            JumpActive = false;
 		}
 
         if (leave_f > -1 && leave_f < 40 && died == false)
@@ -103,6 +106,7 @@ public class Player : MonoBehaviour
 		private void OnCollisionEnter(Collision collision)
         {
 
+        JumpActive = true;
             if (collision.collider.CompareTag("up") && Input.GetKey(KeyCode.W))
             {
                 transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
