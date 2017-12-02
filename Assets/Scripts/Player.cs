@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
 
     public int leave_f, j;//i是代表剛離開的階梯
     public int c;//距離下個關卡
+    public int live = 5;
+    public Text live_T;
     public bool died = false;//生死狀態
     public bool JumpActive = true;
     public float[] px = new float[50];//儲存階梯預設位置
@@ -67,10 +69,11 @@ public class Player : MonoBehaviour
         }
         if (leave_f > -1 && leave_f < 40 && died == false&&leave_f !=-1)
         {
-            if ((GameObject.Find("Cube (" + (leave_f+1) + ")").transform.position.y) - transform.position.y > 8)
+            if ((GameObject.Find("Cube (" + (leave_f+1) + ")").transform.position.y) - transform.position.y > 30)
             {
-                print("true!!");
+                print("died!!");
                 G_Over.SetActive(true);
+                live_T.text = "";
                 AllStairs.SetActive(false);
                 died = true;
             }
@@ -114,10 +117,42 @@ public class Player : MonoBehaviour
             }
 
 
+        if (collision.collider.CompareTag("trap"))
+        {
+            live--;
+            switch (live){
+                case 5:
+                    live_T.text = "Lives:♥♥♥♥♥";
+                    break;
+                case 4:
+                    live_T.text = "Lives:♥♥♥♥";
+                    break;
+                case 3:
+                    live_T.text = "Lives:♥♥♥";
+                    break;
+                case 2:
+                    live_T.text = "Lives:♥♥";
+                    break;
+                case 1:
+                    live_T.text = "Lives:♥";
+                    break;
+                case 0:
+                    print("died!!");
+                    live_T.text = "";
+                    G_Over.SetActive(true);
+                    AllStairs.SetActive(false);
+                    died = true;
+                    break;
+
+            }
+        }
+
         GameObject.Find("Cube (" + leave_f + ")").transform.position = new Vector3(10000, 10000, 10000);
            
 
         }
+
+
 
         private void OnCollisionExit(Collision col)
         {
@@ -143,6 +178,7 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(0, 3, 0);
             leave_f = -1;
             died = false;
+            live_T.text = "Lives:♥♥♥♥♥";
             print("start");
         }
 
