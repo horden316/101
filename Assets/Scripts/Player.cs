@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public float[] pz = new float[50];
     public GameObject G_Over;//死亡畫面
     public GameObject AllStairs;//所有階梯
+    public GameObject Middle_floor5;
     public Rigidbody rb;
     void Start()
     {
@@ -78,8 +79,9 @@ public class Player : MonoBehaviour
                 died = true;
             }
         }
-                if (transform.position.y >= 45)
+                if (transform.position.y >= 45)//循環
                 {
+                    Middle_floor5.SetActive(true); 
                     print("Move");
                     if (leave_f > -1 && leave_f < 50)
                     {
@@ -88,7 +90,7 @@ public class Player : MonoBehaviour
                         {
                             GameObject.Find("Cube (" + k + ")").transform.position = new Vector3(px[k], py[k], pz[k]);
                         }
-                transform.position = new Vector3(transform.position.x, 2, 0);
+                transform.position = new Vector3(transform.position.x, 1, 0);
                         leave_f = -1;
                 print("iiiiiii");
                     }
@@ -147,7 +149,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        GameObject.Find("Cube (" + leave_f + ")").transform.position = new Vector3(10000, 10000, 10000);
+//         GameObject.Find("Cube (" + leave_f + ")").transform.position = new Vector3(10000, 10000, 10000);
            
 
         }
